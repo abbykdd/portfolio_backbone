@@ -1,4 +1,3 @@
-//Model
 
 var Book = Backbone.Model.extend({
 	defaults: {
@@ -7,11 +6,13 @@ var Book = Backbone.Model.extend({
 		year: '',
 		imgUrl: '',
 		language: '',
-		review: '',
 		description: '',
 	}
 });
 var Books = Backbone.Collection.extend({});
+var BooksList = Backbone.Model.extend({
+})
+
 var books = new Books();
 
 var BookView = Backbone.View.extend({
@@ -22,7 +23,6 @@ var BookView = Backbone.View.extend({
 	},
 
 	render: function(){
-		console.log(this.model.toJSON());
 		this.$el.html(this.template(this.model.toJSON()));
 		return this;
 	}
@@ -48,17 +48,33 @@ var booksView = new BooksView();
 
 $(document).ready(function(){
 	$('.search').on('click', function(){
-		var book = new Book({
-			title: 'abc333333',
-			author: 'abc',
-			imgUrl: 'img/1.jpg',
-			year: '1978',
-			language: 'English',
-			review: '4.6',
-			description: 'abababababababab',
+		var searchTitle = $('.search-input').val();
+		var BookCollection = Backbone.Collection.extend({
+			url: `https://www.googleapis.com/books/v1/volumes?q=${searchTitle}`
+			});
+		var collection = new BookCollection();
+		console.log(collection.url)
+		collection.fetch({
+			success: function(){
+				console.log(collection.models[0]);
+				var list = collection.models[0].attributes.items;
+				console.log(list);
+				_.each(list, function(cur){
+					var book = new Book({
+						title: cur.volumeInfo.title,
+						author: cur.volumeInfo.authors[0],
+						year: cur.volumeInfo.publishedDate,
+						imgUrl: cur.volumeInfo.imageLinks.thumbnail,
+						language: cur.volumeInfo.language,
+						description: cur.volumeInfo.subtitle,
+					});
+					console.log(book);
+				});
+				console.log(books);
+			}
 		});
 		$('.search').val('');
-		console.log(book.toJSON());
-		books.add(book);
+		// console.log(book.toJSON());
+		// books.add(book);
 	});
 })
