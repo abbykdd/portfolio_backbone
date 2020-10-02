@@ -5,21 +5,23 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
   <title>Abby Kdd</title>
   <link rel="stylesheet" type="text/css" href="bower_components/bootstrap-css/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Abby Kadierding</h1>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Author</th>
-          <th>Title</th>
-          <th>URL</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-    </table>
+    <h1>Search Book</h1>
+    <input class="search-input">
+    <button class="btn btn-primary search">Search <i class="glyphicon glyphicon-search"></i></button>
   </div>
+  <div class="container books-list">
+  </div>
+
+  <script type="text/template" class="books-list-template">
+    <div class='book-container'>
+      <img src="<%- imgUrl %>" width="100%">
+      <span class="author"><%= author %></span>
+    </div>   
+  </script>
   <script type="text/javascript" src="bower_components/underscore/underscore.js"></script>
   <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
   <script type="text/javascript" src="bower_components/bootstrap-css/js/bootstrap.min.js"></script>
