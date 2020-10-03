@@ -6,6 +6,7 @@
   <title>Abby Kdd</title>
   <link rel="stylesheet" type="text/css" href="bower_components/bootstrap-css/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
@@ -18,8 +19,19 @@
 
   <script type="text/template" class="books-list-template">
     <div class='book-container'>
-      <span class="author"><%= itemName %></span>
-    </div>   
+      <img src="<%- imgUrl %>">
+      <div class="texts">
+        <span class="title">Title: <%= title %></span></br>
+        <span class="author">Author: <%= author %></span></br>
+        <span class="year">Publish Date: <%= year %></span></br>
+        <span class="description">Description: <%= description %></span>
+      </div>
+      <div class="btn-container">
+        <button class="btn btn-primery view-book"><a href="<%= readerLink %>" target="_blank">View</a></button>
+        <button class="btn btn-primery save-book">Save</button>
+      </div>
+    </div>
+    
   </script>
   <script type="text/javascript" src="bower_components/underscore/underscore.js"></script>
   <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>

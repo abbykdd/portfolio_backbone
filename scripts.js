@@ -7,17 +7,33 @@ var Book = Backbone.Model.extend({
 		imgUrl: '',
 		language: '',
 		description: '',
+		readerLink: '',
 	}
 });
 var Books = Backbone.Collection.extend({});
-var BooksList = Backbone.Model.extend({
-})
 
 var books = new Books();
 
 var BookView = Backbone.View.extend({
 	model: new Book(),
 	tagName: 'div',
+	className: 'col',
+
+	// events:{
+	// 	'mouseover': "enter",
+	// 	'mouseout': "leave",
+	// },
+
+	enter: function(e){
+		this.$('.book-container').addClass('overlay-img');
+		this.$('.btn-container').show();
+	},
+
+	leave: function(e){
+		this.$('.book-container').removeClass('overlay-img');
+		this.$('.btn-container').hide();
+	},
+
 	initialize: function(){
 		this.template = _.template($('.books-list-template').html());
 	},
@@ -46,35 +62,43 @@ var BooksView = Backbone.View.extend({
 
 var booksView = new BooksView();
 
+var getBooks = function(keyword){
+	var BookCollection = Backbone.Collection.extend({
+		url: `https://www.googleapis.com/books/v1/volumes?q=${keyword}`
+	});
+	books.reset();
+	var collection = new BookCollection();
+	collection.fetch({
+		success: function(){
+			var list = collection.models[0].attributes.items;
+			_.each(list, function(cur){
+				var des = cur.volumeInfo.subtitle;
+				if(!des){
+					des = "";
+				}
+				var authors = cur.volumeInfo.authors;
+				var mainAuthor = '';
+				if (authors){
+					mainAuthor = authors[0];
+				}
+				var book = new Book({
+					title: cur.volumeInfo.title.substring(0,50),
+					author: mainAuthor,
+					year: cur.volumeInfo.publishedDate,
+					imgUrl: cur.volumeInfo.imageLinks.thumbnail,
+					language: cur.volumeInfo.language,
+					description: des.substring(0, 100),
+					readerLink: cur.volumeInfo.infoLink,
+				});
+				books.add(book);
+			});
+		}
+	});
+	$('.search-input').val('');
+}
+
 $(document).ready(function(){
 	$('.search').on('click', function(){
-		var searchTitle = $('.search-input').val();
-		var BookCollection = Backbone.Collection.extend({
-			url: `https://www.googleapis.com/books/v1/volumes?q=${searchTitle}`
-			});
-		var collection = new BookCollection();
-		console.log(collection.url)
-		collection.fetch({
-			success: function(){
-				console.log(collection.models[0]);
-				var list = collection.models[0].attributes.items;
-				console.log(list);
-				_.each(list, function(cur){
-					var book = new Book({
-						title: cur.volumeInfo.title,
-						author: cur.volumeInfo.authors[0],
-						year: cur.volumeInfo.publishedDate,
-						imgUrl: cur.volumeInfo.imageLinks.thumbnail,
-						language: cur.volumeInfo.language,
-						description: cur.volumeInfo.subtitle,
-					});
-					console.log(book);
-				});
-				console.log(books);
-			}
-		});
-		$('.search').val('');
-		// console.log(book.toJSON());
-		// books.add(book);
+		getBooks($('.search-input').val());
 	});
 })
