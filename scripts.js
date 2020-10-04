@@ -155,6 +155,11 @@ $(document).ready(function(){
 	$('.search').on('click', function(){
 		getBooks($('.search-input').val());
 	});
+	$('.search-input').keypress(function(e){
+		if(e.which == 13){
+			getBooks($('.search-input').val());
+		}
+	});
 	$('.save-page-link').on('click', function(){
 		isOnSearch = false;
 		bookListName = ".save-books-list";
