@@ -5,8 +5,8 @@
 	font-weight: 500 !important;
 }
 img{
-	width: 128px;
-	height: 190px;
+	width: 128px !important;
+	height: 190px !important;
 }
 .err{
 	display: none;
@@ -30,4 +30,21 @@ nav .nav-link{
 
 .save-page {
 	display: none;
+}
+.filter-box{
+	margin-top: 2vh;
+}
+.search{
+	width: 30vw !important;
+	height: 6vh !important;
+	border-radius: 10px !important;
+}
+.search:hover{
+	background-color: rgb(224, 224, 224) !important;
+	font-weight: 850 !important;
+	text-shadow: 0.5px 0.5px grey !important;
+}
+
+.filter-box span{
+	margin-left: 5vw;
 }

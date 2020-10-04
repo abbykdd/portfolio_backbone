@@ -26,11 +26,25 @@
     <div class="container">
       <h2>Search Books</h2>
       <input class="search-input primary">
-      <button class="btn btn-primary search">Search <i class="glyphicon glyphicon-search"></i></button>
+      <button class="btn search">Search <i class="glyphicon glyphicon-search"></i></button>
     </div>
 
     <div class="container">
       <h3>Search Results</h3>
+      <div class="search-filter">
+        <div class="filter-box">
+          <span><input type="radio" id="relevance" name="selected-filter" checked="checked">
+            <label for="relevance">Relevance</label></span>
+          <span><input type="radio" id="newest" name="selected-filter">
+            <label for="newest">Newest</label></span>
+          <span><input type="radio" id="oldest" name="selected-filter">
+            <label for="oldest">Oldest</label></span>
+          <span><input type="radio" id="title" name="selected-filter">
+            <label for="title">Title</label></span>
+          <span><input type="radio" id="author" name="selected-filter">
+            <label for="author">Author</label></span>
+        </div>
+      </div>
       <div class="err">Keyword can not be blank</div>
       <div class="search-books-list">
       </div>
@@ -63,8 +77,8 @@
           
         </div>
         <div class="card-action">
-           <button class="btn btn-primary view-book"><a href="<%= readerLink %>" target="_blank">View</a></button>
-          <button class="btn btn-primary save-book"><a>Save</a></button>
+           <a href="<%= readerLink %>" target="_blank"><button class="btn btn-primary view-book">View</button></a>
+          <a><button class="btn btn-primary save-book">Save</button></a>
         </div>
       </div>
     </div>

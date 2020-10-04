@@ -1,5 +1,6 @@
 
 let isOnSearch = true;
+let relevanceOrder;
 let bookListName = ".search-books-list"
 var Book = Backbone.Model.extend({
 	defaults: {
@@ -76,7 +77,39 @@ var BooksView = Backbone.View.extend({
 	},
 });
 
+var sortByYearOld = function(){
+	books.comparator = function(model){
+		var date = new Date(model.get('year'));
+		return date.getFullYear();
+	};
+	books.sort();
+	booksView.render();
+}
 
+var sortByYearNew = function(){
+	books.comparator = function(model){
+		var date = new Date(model.get('year'));
+		return -date.getFullYear();
+	};
+	books.sort();
+	booksView.render();
+}
+
+var sortByAuthor = function(){
+	books.comparator = function(model){
+		return model.get('author');
+	};
+	books.sort();
+	booksView.render();
+}
+
+var sortByTitle = function(){
+	books.comparator = function(model){
+		return model.get('title');
+	};
+	books.sort();
+	booksView.render();
+}
 
 var booksView = new BooksView();
 
@@ -94,10 +127,7 @@ var getBooks = function(keyword){
 			success: function(){
 				var list = collection.models[0].attributes.items;
 				_.each(list, function(cur){
-					var des = cur.volumeInfo.subtitle;
-					if(!des){
-						des = "";
-					}
+					var pDate = new Date(cur.volumeInfo.publishedDate);					
 					var authors = cur.volumeInfo.authors;
 					var mainAuthor = '';
 					if (authors){
@@ -107,14 +137,15 @@ var getBooks = function(keyword){
 						id: cur.id,
 						title: cur.volumeInfo.title.substring(0,50),
 						author: mainAuthor,
-						year: cur.volumeInfo.publishedDate,
+						year: pDate.toDateString(),
 						imgUrl: cur.volumeInfo.imageLinks.thumbnail,
 						language: cur.volumeInfo.language,
-						description: des,
+						description: cur.volumeInfo.subtitle,
 						readerLink: cur.volumeInfo.infoLink,
 					});
 					books.add(book);
 				});
+				relevanceOrder = books;
 			}
 		});
 	}
@@ -149,4 +180,28 @@ $(document).ready(function(){
 		$('.search-page').show();
 		$('.save-page').hide();
 	});
-})
+	$('input[name=selected-filter]').change(function(){
+		var filter = $('input[name=selected-filter]:checked').attr('id');
+		if(filter != "relevance"){
+			var comp = '';
+			switch(filter) {
+			  case "newest":
+			  	sortByYearNew();
+			  	break;
+			  case "oldest":
+			    // code block
+			    sortByYearOld();
+			    break;
+			  case "title":
+			  	sortByTitle();
+			  	break;
+			  case "author":
+			  	sortByAuthor();
+			  	break;
+			  default:
+			    // code block
+			}
+		}
+		
+	});
+});
