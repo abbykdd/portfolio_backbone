@@ -1,46 +1,33 @@
-div.book-container{
-	display: inline-block;
-	width: 40%;
-  	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  	text-align: center;
-  	height: 25%;
-  	margin-bottom: 2vh;
+.card-image{
+	padding: 15px;
 }
-div.books-list{
-	margin-top: 7vh;
-}
-div.col{
-	display: inline;
-	width:100%;
-	height: 25%;
-	margin: 3vw 3vw 3vw 3vw;
-	position: relative;
-}
-
-.search-input{
-	width: 75%;
+.card .card-title{
+	font-weight: 500 !important;
 }
 img{
-	width: 30%;
-	position: relative;
-	float: left;
+	width: 128px;
+	height: 190px;
 }
-div.texts{
-	font-family: 'Sansita Swashed', cursive;
-	font-size: 18px;
-	text-align: left;
-	width: 60%;
-	position: relative;
-	float: right;
-	margin-right: 10px;
+.err{
+	display: none;
+}
+nav {
+	background-color: white !important;
+}
+nav .nav-link{
+	color: black;
+}
+.nav-item {
+	padding-left: 1vw
+}
+.nav {
+	border: 0 ;
+	padding-top: 1vw;
+}
+.save-book a,  .view-book a{
+	color: white !important;
 }
 
-div.btn-container{
-	display: inline-block;
-	margin-top: 5vh;
-	margin-bottom: 2vh;
-}
-a{
-	text-decoration: none;
-	color: black;
+.save-page {
+	display: none;
 }
