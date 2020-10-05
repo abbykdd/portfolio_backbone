@@ -1,7 +1,6 @@
 
 let isOnSearch = true;
-let relevanceOrder;
-let bookListName = ".search-books-list"
+let bookListName = ".search-books-list";
 var Book = Backbone.Model.extend({
 	defaults: {
 		id: '',
@@ -18,6 +17,8 @@ var Book = Backbone.Model.extend({
 var Books = Backbone.Collection.extend({});
 
 var books = new Books();
+var savedBooks = new Books();
+var searchedBooks =new Books();
 
 var BookView = Backbone.View.extend({
 	model: new Book(),
@@ -36,12 +37,16 @@ var BookView = Backbone.View.extend({
 		}else{
 			var self = this;
 			var savedBooks = JSON.parse(localStorage.getItem("books"));
-			_.each(savedBooks, function(){
-				if (this.id == self.id){
-					savedBooks.pop(this);
-				}
+			savedBooks = $.grep(savedBooks, function(value){
+					return value.id != self.model.id
 			});
 			localStorage.setItem("books", JSON.stringify(savedBooks));
+			books.reset();
+			_.each(savedBooks, function(data){
+				var obj = new Book(data);
+				books.add(obj);
+			});
+			booksView.render();
 		}
 		this.remove();
 
@@ -114,6 +119,7 @@ var sortByTitle = function(){
 var booksView = new BooksView();
 
 var getBooks = function(keyword){
+	$('input[name=selected-filter]:checked').prop("checked",false);
 	if(!keyword || keyword == ' '){
 		$('.err').show();
 	}else{
@@ -145,7 +151,6 @@ var getBooks = function(keyword){
 					});
 					books.add(book);
 				});
-				relevanceOrder = books;
 			}
 		});
 	}
@@ -161,6 +166,8 @@ $(document).ready(function(){
 		}
 	});
 	$('.save-page-link').on('click', function(){
+		books.reset();
+		$('input[name=selected-filter]:checked').prop("checked",false);
 		isOnSearch = false;
 		bookListName = ".save-books-list";
 		$('.search-page').hide();
@@ -171,7 +178,6 @@ $(document).ready(function(){
 			$('.warning').show();
 		}else{
 			$('.warning').hide();
-			books.reset();
 			_.each(savedBooks, function(data){
 				var obj = new Book(data);
 				books.add(obj);
@@ -180,6 +186,8 @@ $(document).ready(function(){
 		}
 	});
 	$('.search-page-link').on('click', function(){
+		$('input[name=selected-filter]:checked').prop("checked",false);
+		books.reset();
 		isOnSearch = true;
 		bookListName = ".search-books-list";
 		$('.search-page').show();
@@ -187,26 +195,26 @@ $(document).ready(function(){
 	});
 	$('input[name=selected-filter]').change(function(){
 		var filter = $('input[name=selected-filter]:checked').attr('id');
-		if(filter != "relevance"){
-			var comp = '';
-			switch(filter) {
-			  case "newest":
-			  	sortByYearNew();
-			  	break;
-			  case "oldest":
-			    // code block
-			    sortByYearOld();
-			    break;
-			  case "title":
-			  	sortByTitle();
-			  	break;
-			  case "author":
-			  	sortByAuthor();
-			  	break;
-			  default:
-			    // code block
-			}
-		}
-		
+		switch(filter) {
+		  case "newest":
+		  case "newest2":
+		  	sortByYearNew();
+		  	break;
+		  case "oldest":
+		  case "oldest2":
+		    // code block
+		    sortByYearOld();
+		    break;
+		  case "title":
+		  case "title2":
+		  	sortByTitle();
+		  	break;
+		  case "author":
+		  case "author2":
+		  	sortByAuthor();
+		  	break;
+		  default:
+		    // code block
+		}		
 	});
 });

@@ -48,3 +48,7 @@ nav .nav-link{
 .filter-box span{
 	margin-left: 5vw;
 }
+#head-lable{
+	font-size: 1.0rem !important;
+	color: grey !important;
+}
