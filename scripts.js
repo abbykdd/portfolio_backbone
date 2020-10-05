@@ -92,11 +92,16 @@ var sortByYearOld = function(){
 }
 
 var sortByYearNew = function(){
+	console.log("here");
 	books.comparator = function(model){
 		var date = new Date(model.get('year'));
 		return -date.getFullYear();
 	};
+	console.log("here2");
+	console.log(books);
 	books.sort();
+	console.log("here3");
+	console.log(books);
 	booksView.render();
 }
 
@@ -119,6 +124,7 @@ var sortByTitle = function(){
 var booksView = new BooksView();
 
 var getBooks = function(keyword){
+	books.comparator = '';
 	$('input[name=selected-filter]:checked').prop("checked",false);
 	if(!keyword || keyword == ' '){
 		$('.err').show();
