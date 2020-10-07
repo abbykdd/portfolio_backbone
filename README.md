@@ -4,7 +4,7 @@
 <h2 align="center">Book Search App</h2>
 
 <h3 align="center">
- Backbone.js, Bootstrap, jQuery, GoogleAPI
+ Backbone.js, Bootstrap, jQuery, GoogleAPI, Highcharts
 
 </h3>
 <br />
@@ -45,6 +45,7 @@ So that I have quick access to the books.
   - jQuery
   - Google Books API
   - Underscore
+  - Highcharts
 
 
 ## Contributing
