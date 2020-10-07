@@ -1,10 +1,7 @@
-# portfolio_backbone
 <br />
 <p align="center">
 
-<img src="https://avatars0.githubusercontent.com/u/25917883?s=460&u=7a579ca5b30bb0db40db0edc7ee93d9ee2469dc7&v=4"  alt="profile picture" width="150" height="150">
-
-<h2 align="center">Google Book Search</h2>
+<h2 align="center">Book Search App</h2>
 
 <h3 align="center">
  Backbone.js, Bootstrap, jQuery, GoogleAPI
@@ -23,13 +20,14 @@
 
 
 ## Project Description
-This is a simple,  Backbone Google Books Search app. This app displays books based on user searches. It also uses localStorage so that users can save books to review or purchase later.
+This is a simple Book Search app, made with backbone and google books api.
+This app displays books based on user searche query. Users can save books they like, which will be stored in browser localStorage, so that users can save books to review or purchase later.
 
 
 ## User story
 
 ```
-As a user, 
+As a user,
 I want to be able to search, view and save books by name
 So that I have quick access to the books.
 ```
@@ -41,14 +39,13 @@ So that I have quick access to the books.
 
 
 
-### Prerequisites
-  Backbone.js  
-  Bootstrap
-  jQuery
-  Underscore
+## Technologies used
+  - Backbone.js
+  - Bootstrap
+  - jQuery
+  - Google Books API
+  - Underscore
 
 
 ## Contributing
- Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. 
- 
- Please make sure to update tests as appropriate.
+ Contribute at your own risk :D
