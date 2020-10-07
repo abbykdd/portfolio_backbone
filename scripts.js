@@ -11,14 +11,17 @@ var Book = Backbone.Model.extend({
 		language: '',
 		description: '',
 		readerLink: '',
+		categories: '',
 	}
 });
+
+var categories = {};
 
 var Books = Backbone.Collection.extend({});
 
 var books = new Books();
 var savedBooks = new Books();
-var searchedBooks =new Books();
+var searchedBooks = new Books();
 
 var BookView = Backbone.View.extend({
 	model: new Book(),
@@ -131,8 +134,8 @@ var getBooks = function(keyword){
 	}else{
 		$('.err').hide();
 		var BookCollection = Backbone.Collection.extend({
-			url: `https://www.googleapis.com/books/v1/volumes?q=${keyword}`
-		});
+			url: `https://www.googleapis.com/books/v1/volumes?q=${keyword}&maxResults=40`
+		});	
 		books.reset();
 		var collection = new BookCollection();
 		collection.fetch({
@@ -145,26 +148,95 @@ var getBooks = function(keyword){
 					if (authors){
 						mainAuthor = authors[0];
 					}
+					var imgUrl;
+					if(!cur.volumeInfo.imageLinks || !cur.volumeInfo.imageLinks.thumbnail){
+						imgUrl = "#";
+					} else {
+						imgUrl = cur.volumeInfo.imageLinks.thumbnail;						
+					}
 					var book = new Book({
 						id: cur.id,
-						title: cur.volumeInfo.title.substring(0,50),
+						title: cur.volumeInfo.title,
 						author: mainAuthor,
 						year: pDate.toDateString(),
-						imgUrl: cur.volumeInfo.imageLinks.thumbnail,
+						imgUrl: imgUrl,
 						language: cur.volumeInfo.language,
 						description: cur.volumeInfo.subtitle,
 						readerLink: cur.volumeInfo.infoLink,
+						categories: cur.volumeInfo.categories,
 					});
 					books.add(book);
 				});
+				drawChart();
 			}
+
 		});
 	}
+}
+var drawChart = function(){
+	_.each(books.models, function(mod){
+		var cats = mod.attributes.categories;
+		_.each(cats, function(c){
+			if(categories[c]){
+				categories[c] += 1;
+			}else{
+				categories[c] = 1;
+			}
+		})
+	})
+	var chartData = []
+	_.each(Object.keys(categories), function(cur){
+		var d = {
+			name: cur,
+			y: categories[cur], 
+		}
+		chartData.push(d);
+	});
+	// $('#chart').show();
+	chartData.sort((a,b) => (b.y - a.y));
+	chartData[0].sliced = "true";
+	chartData[0].selected = "true";
+
+	Highcharts.chart('charts', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Search results by book categories'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.y}'
+            }
+        }
+    },
+    series: [{
+        name: 'Number of books',
+        colorByPoint: true,
+	        data: chartData,
+	    }]
+	});
 }
 
 $(document).ready(function(){
 	$('.search').on('click', function(){
 		getBooks($('.search-input').val());
+		// drawChart();
 	});
 	$('.search-input').keypress(function(e){
 		if(e.which == 13){
@@ -172,6 +244,7 @@ $(document).ready(function(){
 		}
 	});
 	$('.save-page-link').on('click', function(){
+		$('#charts').highcharts().destroy();
 		books.reset();
 		$('input[name=selected-filter]:checked').prop("checked",false);
 		isOnSearch = false;
